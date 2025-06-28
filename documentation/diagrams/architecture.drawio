@@ -1,0 +1,61 @@
+<mxfile host="Electron" agent="Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) draw.io/27.0.9 Chrome/134.0.6998.205 Electron/35.4.0 Safari/537.36" version="27.0.9">
+  <diagram name="Arquitetura" id="some-id">
+    <mxGraphModel dx="1234" dy="790" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="827" pageHeight="1169" math="0" shadow="0">
+      <root>
+        <mxCell id="0" />
+        <mxCell id="1" parent="0" />
+        <mxCell id="frontend" value="Frontend (HTML/NGINX)" style="shape=html;whiteSpace=wrap;html=1;" parent="1" vertex="1">
+          <mxGeometry x="20" y="120" width="140" height="60" as="geometry" />
+        </mxCell>
+        <mxCell id="gateway" value="API Gateway (Auth + Routing)" style="shape=cylinder;whiteSpace=wrap;html=1;" parent="1" vertex="1">
+          <mxGeometry x="200" y="120" width="180" height="60" as="geometry" />
+        </mxCell>
+        <mxCell id="arrow1" style="endArrow=block;html=1;" parent="1" source="frontend" target="gateway" edge="1">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="uploader" value="video-processor-uploader" style="shape=process;whiteSpace=wrap;html=1;" parent="1" vertex="1">
+          <mxGeometry x="420" y="40" width="200" height="60" as="geometry" />
+        </mxCell>
+        <mxCell id="worker" value="video-processor-worker" style="shape=process;whiteSpace=wrap;html=1;" parent="1" vertex="1">
+          <mxGeometry x="420" y="230" width="200" height="60" as="geometry" />
+        </mxCell>
+        <mxCell id="s3" value="S3 Bucket" style="shape=datastore;whiteSpace=wrap;html=1;" parent="1" vertex="1">
+          <mxGeometry x="660" y="124" width="120" height="60" as="geometry" />
+        </mxCell>
+        <mxCell id="kafka" value="Kafka (processor.video.file)" style="shape=cloud;whiteSpace=wrap;html=1;" parent="1" vertex="1">
+          <mxGeometry x="420" y="136" width="200" height="60" as="geometry" />
+        </mxCell>
+        <mxCell id="arrow2" style="endArrow=block;html=1;" parent="1" source="gateway" target="uploader" edge="1">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="arrow3" style="endArrow=block;html=1;" parent="1" source="uploader" target="s3" edge="1">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="arrow4" style="endArrow=block;dashed=1;html=1;" parent="1" source="uploader" target="kafka" edge="1">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="arrow5" style="endArrow=block;html=1;" parent="1" source="kafka" target="worker" edge="1">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="arrow6" style="endArrow=block;html=1;" parent="1" source="worker" target="s3" edge="1">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="2" value="Polling (consulta periódica por vídeos prontos - habiltada somente quando disparada requisição de processamento)" style="shape=note;whiteSpace=wrap;html=1;" parent="1" vertex="1">
+          <mxGeometry x="20" y="220" width="180" height="60" as="geometry" />
+        </mxCell>
+        <mxCell id="3" style="endArrow=block;dashed=1;html=1;" parent="1" source="2" target="gateway" edge="1">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="k-Dryp57T_0RaOyvKjQZ-3" value="Base de&amp;nbsp;&lt;br&gt;Dados" style="shape=datastore;whiteSpace=wrap;html=1;" vertex="1" parent="1">
+          <mxGeometry x="680" y="217" width="120" height="70" as="geometry" />
+        </mxCell>
+        <mxCell id="k-Dryp57T_0RaOyvKjQZ-4" style="endArrow=block;html=1;exitX=1.005;exitY=0.367;exitDx=0;exitDy=0;exitPerimeter=0;entryX=0;entryY=0.5;entryDx=0;entryDy=0;" edge="1" parent="1" source="worker" target="k-Dryp57T_0RaOyvKjQZ-3">
+          <mxGeometry relative="1" as="geometry">
+            <mxPoint x="630" y="246" as="sourcePoint" />
+            <mxPoint x="716" y="200" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+      </root>
+    </mxGraphModel>
+  </diagram>
+</mxfile>

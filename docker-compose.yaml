@@ -1,0 +1,158 @@
+services:
+  front:
+    image: video-processor-front:0.0.1
+    restart: always
+    ports:
+      - 3000:3000
+    volumes:
+      - ../video-processor-front/static/index.html:/app/static/index.html
+    environment:
+      - TARGET_HOST=http://api-gateway
+      - SERVER_PORT=3000
+    networks:
+      - video-processor
+
+  api-gateway:
+    image: nginx:latest
+    container_name: api-gateway
+    ports:
+      - "5000:80"
+    volumes:
+      - ./api-gateway/nginx.conf:/etc/nginx/nginx.conf
+      - ./api-gateway/.htpasswd:/etc/nginx/.htpasswd
+    environment:
+      - NGINX_MAX_BODY_SIZE=100M
+    depends_on:
+      - uploader
+      - worker
+    networks:
+      - video-processor
+
+  uploader:
+    image: video-processor-uploader:0.0.1
+    restart: always
+    ports:
+      - 5001:5001
+    environment:
+      - SERVER_PORT=5001
+      - GIN_MODE=release
+      - AWS_ACCESS_KEY_ID=test
+      - AWS_SECRET_ACCESS_KEY=test
+      - AWS_REGION=us-east-1
+      - S3_ENDPOINT=http://localstack:4566
+      - S3_BUCKET_NAME=video-bucket
+      - S3_USER=admin
+      - S3_PASS=admin
+      - KAFKA_BROKER=kafka:9092
+      - KAFKA_TOPIC=processor.video.file
+    depends_on:
+      localstack:
+        condition: service_healthy
+      db:
+        condition: service_healthy
+      kafka:
+        condition: service_healthy
+    networks:
+      - video-processor
+
+  worker:
+    image: video-processor-worker:0.0.1
+    restart: always
+    ports:
+      - 5002:5002
+    environment:
+      - SERVER_PORT=5002
+      - GIN_MODE=release
+      - AWS_ACCESS_KEY_ID=test
+      - AWS_SECRET_ACCESS_KEY=test
+      - AWS_REGION=us-east-1
+      - S3_ENDPOINT=http://localstack:4566
+      - S3_BUCKET_NAME=video-bucket
+      - S3_USER=admin
+      - S3_PASS=admin
+      - DB_USER=admin
+      - DB_PASS=admin
+      - DB_NAME=video_processor
+      - DB_DRIVER=postgres
+      - DB_HOST=db:5432
+      - DB_OPTIONS=?sslmode=disable
+      - KAFKA_BROKER=kafka:9092
+      - KAFKA_TOPIC=processor.video.file
+      - KAFKA_GROUP_ID=video-processor-group
+    depends_on:
+      localstack:
+        condition: service_healthy
+      db:
+        condition: service_healthy
+      kafka:
+        condition: service_healthy
+    networks:
+      - video-processor
+
+  localstack:
+    image: localstack/localstack
+    ports:
+      - "4566:4566"
+    environment:
+      - SERVICES=s3
+      - AWS_REGION=us-east-1
+      - AWS_ACCESS_KEY_ID=test
+      - AWS_SECRET_ACCESS_KEY=test
+      - EDGE_PORT=4566
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:4566/_localstack/health"]
+      interval: 5s
+      timeout: 10s
+      retries: 10
+    volumes:
+      - "/var/run/docker.sock:/var/run/docker.sock"
+      - ${PWD}/localstack/data:/var/lib/localstack
+      - ${PWD}/localstack/init-aws.sh:/etc/localstack/init/ready.d/init.sh
+    networks:
+      - video-processor
+
+  db:
+    image: postgres:17-alpine
+    environment:
+      - POSTGRES_USER=admin
+      - POSTGRES_PASSWORD=admin
+      - POSTGRES_DB=video_processor
+    ports:
+      - "5432:5432"
+    volumes:
+      - ${PWD}/db/migrations/V001__init.sql:/docker-entrypoint-initdb.d/init.sql
+    networks:
+      - video-processor
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -d video_processor -U admin"]
+      interval: 5s
+      timeout: 5s
+      retries: 5
+
+  kafka:
+    image: apache/kafka:4.0.0
+    ports:
+      - "9092:9092"
+    environment:
+      KAFKA_NODE_ID: 1
+      KAFKA_PROCESS_ROLES: broker,controller
+      KAFKA_LISTENERS: PLAINTEXT://:9092,CONTROLLER://:9093
+      KAFKA_ADVERTISED_LISTENERS: PLAINTEXT://kafka:9092
+      KAFKA_CONTROLLER_LISTENER_NAMES: CONTROLLER
+      KAFKA_LISTENER_SECURITY_PROTOCOL_MAP: CONTROLLER:PLAINTEXT,PLAINTEXT:PLAINTEXT
+      KAFKA_CONTROLLER_QUORUM_VOTERS: 1@:9093
+      KAFKA_OFFSETS_TOPIC_REPLICATION_FACTOR: 1
+      KAFKA_TRANSACTION_STATE_LOG_REPLICATION_FACTOR: 1
+      KAFKA_TRANSACTION_STATE_LOG_MIN_ISR: 1
+      KAFKA_GROUP_INITIAL_REBALANCE_DELAY_MS: 0
+    networks:
+      - video-processor
+    healthcheck:
+      test: ["CMD", "/opt/kafka/bin/kafka-broker-api-versions.sh", "--bootstrap-server", "localhost:9092"]
+      interval: 10s
+      timeout: 5s
+      retries: 10
+
+networks:
+  video-processor:
+    external: true
