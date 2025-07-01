@@ -1,0 +1,49 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: api-gateway
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: api-gateway
+  template:
+    metadata:
+      labels:
+        app: api-gateway
+    spec:
+      containers:
+      - name: api-gateway
+        image: nginx:latest
+        ports:
+        - containerPort: 80
+        env:
+        - name: NGINX_MAX_BODY_SIZE
+          value: "100M"
+        volumeMounts:
+        - name: nginx-config
+          mountPath: /etc/nginx/nginx.conf
+          subPath: nginx.conf
+        - name: htpasswd
+          mountPath: /etc/nginx/.htpasswd
+          subPath: .htpasswd
+      volumes:
+      - name: nginx-config
+        hostPath:
+          path: ./api-gateway/nginx.conf
+      - name: htpasswd
+        hostPath:
+          path: ./api-gateway/.htpasswd
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: api-gateway
+spec:
+  selector:
+    app: api-gateway
+  ports:
+  - protocol: TCP
+    port: 5000
+    targetPort: 80
+  type: ClusterIP

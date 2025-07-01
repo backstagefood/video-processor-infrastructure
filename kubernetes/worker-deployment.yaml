@@ -1,0 +1,85 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: worker
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: worker
+  template:
+    metadata:
+      labels:
+        app: worker
+    spec:
+      containers:
+      - name: worker
+        image: video-processor-worker:0.0.1
+        env:
+        - name: SERVER_PORT
+          value: "5002"
+        - name: GIN_MODE
+          value: "release"
+        - name: AWS_ACCESS_KEY_ID
+          valueFrom:
+            secretKeyRef:
+              name: video-processor-secrets
+              key: AWS_ACCESS_KEY_ID
+        - name: AWS_SECRET_ACCESS_KEY
+          valueFrom:
+            secretKeyRef:
+              name: video-processor-secrets
+              key: AWS_SECRET_ACCESS_KEY
+        - name: AWS_REGION
+          value: "us-east-1"
+        - name: S3_ENDPOINT
+          value: "http://localstack:4566"
+        - name: S3_BUCKET_NAME
+          value: "video-bucket"
+        - name: S3_USER
+          valueFrom:
+            secretKeyRef:
+              name: video-processor-secrets
+              key: S3_USER
+        - name: S3_PASS
+          valueFrom:
+            secretKeyRef:
+              name: video-processor-secrets
+              key: S3_PASS
+        - name: DB_USER
+          valueFrom:
+            secretKeyRef:
+              name: video-processor-secrets
+              key: DB_USER
+        - name: DB_PASS
+          valueFrom:
+            secretKeyRef:
+              name: video-processor-secrets
+              key: DB_PASS
+        - name: DB_NAME
+          value: "video_processor"
+        - name: DB_DRIVER
+          value: "postgres"
+        - name: DB_HOST
+          value: "db:5432"
+        - name: DB_OPTIONS
+          value: "?sslmode=disable"
+        - name: KAFKA_BROKER
+          value: "kafka:9092"
+        - name: KAFKA_TOPIC
+          value: "processor.video.file"
+        - name: KAFKA_GROUP_ID
+          value: "video-processor-group"
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: worker
+spec:
+  selector:
+    app: worker
+  ports:
+  - protocol: TCP
+    port: 5002
+    targetPort: 5002
+  type: ClusterIP
