@@ -39,10 +39,10 @@ TRUNCATE files, users, file_status RESTART IDENTITY CASCADE;
 
 -- Pre-populate status values
 INSERT INTO file_status (id, status) VALUES
-  (1, 'PENDING'),
-  (2, 'PROCESSING'),
-  (3, 'PROCESSED'),
-  (4, 'ERROR');
+  (1, 'pendente'),
+  (2, 'em processamento'),
+  (3, 'processado'),
+  (4, 'erro');
 
 -- Insert specific users
 INSERT INTO users (name, email, created_at, updated_at) VALUES
