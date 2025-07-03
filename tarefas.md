@@ -39,3 +39,38 @@ comunicação)
 - enviar sequencia com multiplas requisicoes para processamento
 - rodar tudo no kubernetes
 
+
+
+```
+func (f *fileConsumer) ConsumeClaim(session sarama.ConsumerGroupSession, claim sarama.ConsumerGroupClaim) error {
+	for message := range claim.Messages() {
+		slog.Info("recebendo nova mensagem",
+			slog.String("topic", message.Topic),
+			slog.String("key", string(message.Key)),
+			slog.String("value", string(message.Value)),
+		)
+
+		var filePayload domain.FilePayload
+		if err := json.Unmarshal(message.Value, &filePayload); err != nil {
+			slog.Error("não foi possível receber a mensagem do topico kafka", slog.String("error", err.Error()))
+			session.MarkMessage(message, "")
+			continue
+		}
+
+		slog.Info("video recebido com sucesso", "filePayload", filePayload)
+		session.MarkMessage(message, "")
+		// gravar arquivo
+		fileId := f.insertFile(&filePayload)
+
+		if fileId != nil {
+			go func() {
+				f.atualizaStatus(fileId, &domain.FileProcessingResult{FilePath: nil, FileSize: nil, Status: 2, Message: "em processamento"})
+				processingResult := f.processFile(context.Background(), filePayload.FilePath, filePayload.UserName)
+				f.atualizaStatus(fileId, processingResult)
+			}()
+		}
+
+	}
+	return nil
+}
+```
