@@ -19,7 +19,7 @@ spec:
         - containerPort: 80
         env:
         - name: NGINX_MAX_BODY_SIZE
-          value: "100M"
+          value: "5G"
         volumeMounts:
         - name: nginx-config
           mountPath: /etc/nginx/nginx.conf
@@ -30,10 +30,10 @@ spec:
       volumes:
       - name: nginx-config
         hostPath:
-          path: ./api-gateway/nginx.conf
+          path: ../api-gateway/nginx.conf
       - name: htpasswd
         hostPath:
-          path: ./api-gateway/.htpasswd
+          path: ../api-gateway/.htpasswd
 ---
 apiVersion: v1
 kind: Service

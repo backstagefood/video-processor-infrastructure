@@ -31,7 +31,7 @@ spec:
       volumes:
       - name: db-init-script
         hostPath:
-          path: ./db/migrations/V001__init.sql
+          path: ../db/migrations/V001__init.sql
 ---
 apiVersion: v1
 kind: Service

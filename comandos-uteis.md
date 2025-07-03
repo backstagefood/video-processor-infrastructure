@@ -38,6 +38,7 @@ aws --endpoint-url=http://localhost:4566 s3 sync ./videos/ s3://video-bucket/
 ## enviar arquivo via curl: 
 
 
+curl -X POST -H "Authorization: Basic $(echo -n 'chaves@gmail.com:123456' | base64)" -F "video=@/dados/videos/series/Rick.and.Morty.S05/Rick.and.Morty.S05E02.Mortyplicity.1080p.AMZN.WEB-DL.DDP5.1.H.264-NTb.mkv" http://localhost:3000/api/upload
 curl -X POST -H "Authorization: Basic $(echo -n 'chaves@gmail.com:123456' | base64)" -F "video=@/home/hamilton/Videos/sample_2.mp4" http://localhost:3000/api/upload
 
 

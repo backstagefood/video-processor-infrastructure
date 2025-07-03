@@ -2,7 +2,7 @@
 
 # Configurações padrão
 URL="http://localhost:3000/api/upload"
-FILE_PATH="/home/hamilton/Videos/sample_2.mp4"
+FILE_PATH="/dados/videos/series/Rick.and.Morty.S05/Rick.and.Morty.S05E02.Mortyplicity.1080p.AMZN.WEB-DL.DDP5.1.H.264-NTb.mkv"
 CREDENTIALS="chaves@gmail.com:123456"
 COUNT=1
 VERBOSE=false
