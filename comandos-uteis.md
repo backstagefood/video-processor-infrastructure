@@ -42,4 +42,9 @@ curl -X POST -H "Authorization: Basic $(echo -n 'chaves@gmail.com:123456' | base
 curl -X POST -H "Authorization: Basic $(echo -n 'chaves@gmail.com:123456' | base64)" -F "video=@/home/hamilton/Videos/sample_2.mp4" http://localhost:3000/api/upload
 
 
+ffmpeg -loglevel error -i "home/hamilton/Videos/sample_2.mp4" -f image2pipe -vf "fps=30" -vcodec mjpeg -q:v 2 -vsync 0 -frame_pts 1 pipe:1
+
+ffmpeg -loglevel error -i /home/hamilton/Videos/sample_2.mp4 -vf "fps=1" -vcodec mjpeg -q:v 2 -vsync 0 -frame_pts 1 -f image2pipe pipe:1 | zip -q -j frames.zip
+
+
 
