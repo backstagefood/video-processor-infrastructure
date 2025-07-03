@@ -62,6 +62,8 @@ services:
 #      - 5002:5002
     environment:
       - SERVER_PORT=5002
+      - MAX_VIDEOS=20
+      - PROCESSING_DELAY=1 # em segundos
       - GIN_MODE=release
       - AWS_ACCESS_KEY_ID=test
       - AWS_SECRET_ACCESS_KEY=test

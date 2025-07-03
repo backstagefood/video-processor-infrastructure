@@ -28,6 +28,8 @@ GIN_MODE=release
 ```.env
 SERVER_PORT=9002
 SWAGGER_HOST=localhost:9002
+MAX_VIDEOS=20
+PROCESSING_DELAY=0
 DB_USER=admin
 DB_PASS=admin
 DB_NAME=video_processor
