@@ -4,16 +4,16 @@
 
 - [x] Desenho de arquitetura
 - [x] Desenvolvimento de microsserviços
-- [ ] Qualidade de Software
+- [x] Qualidade de Software
 - [x] Mensageria
-- [ ] E outros conceitos abordados
+- [x] E outros conceitos abordados
 
 ## Funcionalidades Essenciais
 
-- [ ] A nova versão do sistema deve processar mais de um vídeo ao mesmo tempo
-- [ ] Em caso de picos, o sistema não deve perder uma requisição
+- [x] A nova versão do sistema deve processar mais de um vídeo ao mesmo tempo
+- [x] Em caso de picos, o sistema não deve perder uma requisição
 - [x] O Sistema deve ser protegido por usuário e senha
-- [ ] O fluxo deve ter uma listagem de status dos vídeos de um usuário
+- [x] O fluxo deve ter uma listagem de status dos vídeos de um usuário
 - [ ] Em caso de erro, um usuário pode ser notificado (e-mail ou outro meio de
 comunicação)
 
@@ -29,7 +29,7 @@ comunicação)
 
 - [x] Containers: Docker + Kubernetes ou Docker Compose
 - [x] Mensageria: RabbitMQ, Apache Kafka ou similar
-- [ ] Banco de Dados: PostgreSQL + Redis (cache) (ou um outro de preferência do grupo)
+- [x] Banco de Dados: PostgreSQL + Redis (cache) (ou um outro de preferência do grupo)
 - [ ] Monitoramento: Prometheus + Grafana, ELK Stack ou algo de preferência do grupo
 - [ ] CI/CD: GitHub Actions (ou algo de preferência do grupo)
 
