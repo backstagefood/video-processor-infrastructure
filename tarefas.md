@@ -34,13 +34,6 @@ comunicação)
 - [ ] CI/CD: GitHub Actions (ou algo de preferência do grupo)
 
 ### pendencias
-- ajustar tabela no frontend para incluir o status 
-- ajustar worker para ter maximo de tarefas
-- enviar sequencia com multiplas requisicoes para processamento
-- rodar tudo no kubernetes
-
-
-
 ```
 func (f *fileConsumer) ConsumeClaim(session sarama.ConsumerGroupSession, claim sarama.ConsumerGroupClaim) error {
 	for message := range claim.Messages() {
