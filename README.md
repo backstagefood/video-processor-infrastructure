@@ -1,4 +1,7 @@
 # video-processor
+Este é o projeto principal do hackaton da fase final do curso "Software Architecture - SOAT" da FIAP.       
+Trata-se de um processador de vídeos que gera um arquivo zip com os frames a cada segundo.
+
 
 ## arquitetura proposta
 
@@ -21,36 +24,55 @@
 
 ![base de dados](documentation/images/database.png)
 
-## executar no docker compose
 
-1. criar rede do docker com comando abaixo:
-    > docker network create video-processor
+## links dos projetos relacionados
+- [front](https://github.com/backstagefood/video-processor-front)
+- [uploader](https://github.com/backstagefood/video-processor-uploader)
+- [worker](https://github.com/backstagefood/video-processor-worker)
 
-2. gerar imagens docker dos projetos back e front:
+## links dos projetos no sonar cloud
+- [front](https://sonarcloud.io/project/overview?id=backstagefood_video-processor-front)
+- [uploader](hhttps://sonarcloud.io/project/overview?id=backstagefood_video-processor-uploader)
+- [worker](https://sonarcloud.io/project/overview?id=backstagefood_video-processor-worker)
 
+## executar localmente utilizando docker compose na raiz deste projeto
+
+1. gerar imagens docker dos projetos video-processor-front, video-processor-uploader e video-processor-worker, utilizando o comando abaixo:
     ```shell
     make
     ```
 
-3. run docker compose:
+2. gerar arquivo .env com o seguinte conteúdo: 
+   ```env
+   EMAIL_SENDER_FROM=
+   EMAIL_SENDER_PASSWORD=
+   ```
+
+3. adicionar usuários para testes no api-gateway, caso seja necessário(os usuarios padrão são user@gmail e hfantin@gmail.com com senha de 1 a 6)
+   > echo "novo_usuario@gmail.com:$(openssl passwd -apr1 123456)" >> api-gateway/.htpasswd
+
+4. criar rede do docker com comando abaixo:   
+   > docker network create video-processor
+
+5. executar docker compose:   
     > docker compose up -d
 
-4. acessar endereço http://localhost:3000
+6. acessar endereço do frontend: http://localhost:3000   
 
-5. informar um dos usuarios de testes com senha de 1 a 6: 
-   hfantin@gmail.com 
-   user@gmail.com
-6. enviar um dos videos contidos na pasta documentation/videos:
-   video_amostra.mp4
-   video_erro.mp4
+7. informar um dos usuários de testes com senha de 1 a 6(ou o novo usuário adicionado):    
+   hfantin@gmail.com    
+   user@gmail.com   
 
-7. aguardar o processamento, a lista com o resultado será atualizada automaticamente.   
+8. enviar um dos vídeos contidos na pasta [documentation/videos](documentation/videos):   
+   video_amostra.mp4   
+   video_erro.mp4   
+
+9. aguardar o processamento, a lista com o resultado será atualizada automaticamente.   
    Caso finalize com sucesso, o link para o download do arquivo ficará visível,    
    em caso de erro, será exibida mensagem e um email será enviado ao usuário
  
 
-
-## executar localmente - sem docker compose
+## executar localmente - sem docker compose - apenas para desenvolvimento
 ### pré-requisitos
 
 - instalar ffmpeg
