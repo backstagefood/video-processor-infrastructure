@@ -4,6 +4,13 @@
 
 ![arquitetura proposta](documentation/images/architecture.v3.png)
 
+## Pilha Tecnológica Utilizada
+- Containers: Docker + Docker Compose
+- Mensageria: Apache Kafka
+- Banco de Dados: PostgreSQL + Redis (cache)
+- Monitoramento: Prometheus + Grafana
+- CI/CD: GitHub Actions
+
 ## arquitetura proposta
 - video-processor-front - pagina html estatica usando servidor de arquivos estaticos escritos em golang que acessa as APIs do sistema via api-gateway
 - api-gateway - gateway que aciona os microserviços e prove a camada de autenticação básica
