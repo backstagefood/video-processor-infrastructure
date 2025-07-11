@@ -5,7 +5,7 @@ services:
     ports:
       - 3000:3000
     volumes:
-      - ../video-processor-front/static/index.html:/app/static/index.html
+      - ../video-processor-front/static/:/app/static/
     environment:
       - TARGET_HOST=http://api-gateway
       - SERVER_PORT=3000
@@ -81,6 +81,8 @@ services:
       - KAFKA_BROKER=kafka:9092
       - KAFKA_TOPIC=processor.video.file
       - KAFKA_GROUP_ID=video-processor-group
+      - EMAIL_SENDER_FROM=${EMAIL_SENDER_FROM}
+      - EMAIL_SENDER_PASSWORD=${EMAIL_SENDER_PASSWORD}
     depends_on:
       localstack:
         condition: service_healthy

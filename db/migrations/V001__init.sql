@@ -46,9 +46,8 @@ INSERT INTO file_status (id, status) VALUES
 
 -- Insert specific users
 INSERT INTO users (name, email, created_at, updated_at) VALUES
-     ('Seu Madruga', 'madruga@gmail.com', '2025-06-10 08:00:00', null),
-     ('Chaves', 'chaves@gmail.com', '2025-06-11 09:00:00', null),
-     ('Kiko', 'kiko@gmail.com', '2025-06-12 10:00:00', null);
+     ('Hamilton', 'hfantin@gmail.com', '2025-06-10 08:00:00', null),
+     ('User', 'user@gmail.com', '2025-06-11 09:00:00', null);
 
 -- Insert videos with meaningful names and logical statuses
 -- INSERT INTO videos (user_id, file_name, file_size, status_id) VALUES

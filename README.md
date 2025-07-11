@@ -47,6 +47,8 @@ S3_BUCKET_NAME=video-bucket
 S3_USER=admin
 S3_PASS=admin
 GIN_MODE=release
+EMAIL_FROM=your_email@gmail.com
+EMAIL_PASSWORD=your_secret_password
 ```
 
 ## executar no docker compose
