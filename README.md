@@ -75,6 +75,11 @@ EMAIL_PASSWORD=your_secret_password
 
 ## desenho da arquitetura proposta
 
-![arquitetura proposta](documentation/images/architecture.v2.png)
+![arquitetura proposta](documentation/images/architecture.v3.png)
+
+
+## base de dados
+
+![base de dados](documentation/images/database.png)
 
 
