@@ -25,12 +25,11 @@
 
 1. criar rede do docker com comando abaixo:
     > docker network create video-processor
+
 2. gerar imagens docker dos projetos back e front:
 
     ```shell
-    make -C video-processor-uploader docker-build
-    make -C video-processor-worker docker-build
-    make -C video-processor-front docker-build
+    make
     ```
 
 3. run docker compose:
