@@ -24,6 +24,7 @@ Trata-se de um processador de vídeos que gera um arquivo zip com os frames a ca
 
 ![base de dados](documentation/images/database.png)
 
+obs.: o script para criação da base de dados está em [db/migrations/V001__inti.sql](db/migrations/V001__init.sql) e já está configurado no docker-compose   
 
 ## links dos projetos relacionados
 - [front](https://github.com/backstagefood/video-processor-front)
