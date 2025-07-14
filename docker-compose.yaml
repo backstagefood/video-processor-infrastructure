@@ -4,8 +4,8 @@ services:
     restart: always
     ports:
       - 3000:3000
-    volumes:
-      - ../video-processor-front/static/:/app/static/
+#    volumes:
+#      - ../video-processor-front/static/:/app/static/
     environment:
       - TARGET_HOST=http://api-gateway
       - SERVER_PORT=3000
@@ -174,15 +174,36 @@ services:
     image: prom/prometheus:latest
     volumes:
       - ./prometheus.yml:/etc/prometheus/prometheus.yml
+      - ./data/prometheus_data:/prometheus
     ports:
       - "9090:9090"
+    user: "nobody:nobody"
+    command:
+      - '--config.file=/etc/prometheus/prometheus.yml'
+      - '--storage.tsdb.path=/prometheus'
+    depends_on:
+      - uploader
+      - worker
+    networks:
+      - video-processor
 
   grafana:
     image: grafana/grafana:latest
     ports:
-      - "3001:3001"
+      - "3001:3000"
+    volumes:
+      - ./data/grafana_data:/var/lib/grafana
+      - ./grafana/provisioning:/etc/grafana/provisioning
+      - ./grafana/dashboards:/var/lib/grafana/dashboards
+    environment:
+      - GF_SECURITY_ADMIN_USER=admin
+      - GF_SECURITY_ADMIN_PASSWORD=admin
+#      - GF_USERS_ALLOW_SIGN_UP=false
+
     depends_on:
       - prometheus
+    networks:
+      - video-processor
 
 networks:
   video-processor:

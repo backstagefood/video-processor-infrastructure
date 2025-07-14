@@ -2,3 +2,4 @@
 .idea/
 .env
 localstack/data/
+data/

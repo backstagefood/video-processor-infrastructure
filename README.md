@@ -71,6 +71,10 @@ obs.: o script para criação da base de dados está em [db/migrations/V001__int
 9. aguardar o processamento, a lista com o resultado será atualizada automaticamente.   
    Caso finalize com sucesso, o link para o download do arquivo ficará visível,    
    em caso de erro, será exibida mensagem e um email será enviado ao usuário
+
+10. link do grafana: 
+    [localhost:3001](localstack:3001) 
+    usuario: admin senha: admin
  
 
 ## executar localmente - sem docker compose - apenas para desenvolvimento
